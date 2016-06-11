@@ -32,8 +32,7 @@ def download_eia923_archives(mirror, destination):
         file_url = "%s%s" % (mirror, file_name)
         download_file(file_url, file_path)
 
-
-if __name__ == '__main__':
+def mirror():
     parser = argparse.ArgumentParser(description='Download eia-923 archives')
     parser.add_argument('--mirror', dest='mirror', 
                         default='http://www.eia.gov/electricity/data/eia923/xls/')
@@ -48,3 +47,6 @@ if __name__ == '__main__':
     server_address = ('0.0.0.0', 8765)
     httpd = HTTPServer(server_address, SimpleHTTPRequestHandler)
     httpd.serve_forever()
+
+if __name__ == '__main__':
+    mirror()
