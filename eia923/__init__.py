@@ -34,19 +34,28 @@ def download_eia923_archives(mirror, destination):
 
 def mirror():
     parser = argparse.ArgumentParser(description='Download eia-923 archives')
-    parser.add_argument('--mirror', dest='mirror', 
-                        default='http://www.eia.gov/electricity/data/eia923/xls/')
+    parser.add_argument('--source', dest='source',
+                        default='http://www.eia.gov/electricity/data/eia923/xls/',
+                        help="default is http://www.eia.gov/electricity/data/eia923/xls/")
     parser.add_argument('--destination', dest='destination',
                         default=os.curdir)
+    parser.add_argument('--server', dest='server',
+                        default=None,
+                        help="host:port to serve, default is none")
     
     args = parser.parse_args()
-    download_eia923_archives(args.mirror, 
+    download_eia923_archives(args.source,
                              args.destination)
-    download_eia906_archives("%sutility/" % args.mirror, 
+    download_eia906_archives("%sutility/" % args.source,
                              os.path.sep.join((args.destination, "utility")))
-    server_address = ('0.0.0.0', 8765)
-    httpd = HTTPServer(server_address, SimpleHTTPRequestHandler)
-    httpd.serve_forever()
+
+    if args.server != None:
+        os.chdir(args.destination)
+        host, port = args.server.split(':')
+        port = int(port)
+        httpd = HTTPServer((host, port), SimpleHTTPRequestHandler)
+        print("Serving data at %s:%d" % (host, port))
+        httpd.serve_forever()
 
 if __name__ == '__main__':
     mirror()
