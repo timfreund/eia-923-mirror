@@ -38,6 +38,7 @@ setup(
     entry_points={
         'console_scripts': [
             'eia-923-mirror=eia923:mirror',
+            'eia-923-convert-and-store=eia923.preprocess:convert_and_store_cli',
         ],
     },
 )
